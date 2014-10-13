@@ -10,7 +10,7 @@ if __name__ == "__main__":
     # turn into numbers
     plain_bytes = [ord(c) for c in plaintext[1]]
     
-    # turn gorups of 'length' into unsigned 64 bit values
+    # put the bytes into blocks
     plain_nums = []
     working_num = 0
     length = 0
