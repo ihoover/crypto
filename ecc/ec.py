@@ -7,23 +7,12 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir)))
 import algebra
 
-
-p = 709
-inf = "infinity"
-A = -5
-B = 9
-
-def curve(n):
-    """
-    This is the equation for the curve, the the cubic side.  The other side is assumed to be a perfect square.
-    """
-    
-    return (n**3 + A * n + B)%p
+inf = "Infinity"
 
 # a number mod p
 class pnum(algebra.Element):
     def __init__(self, n, p=None):
-        if type(n) == int:
+        if type(n) == int or type(n) == long:
             self.value = n % p
             self.prime = p
         elif type(n) == type(self):
@@ -102,7 +91,7 @@ class pnum(algebra.Element):
         return self.__str__()
     
     def inv(self):
-        return self**(p-2)
+        return self**(self.prime-2)
     
     def Order(self):
         return p-1
@@ -114,7 +103,7 @@ class pnum(algebra.Element):
 # a point in the elliptic curve
 class point(algebra.Element):
     """
-    the class pf a point on the elliptic curve
+    the class of a point on the elliptic curve
     """
     
     @classmethod
@@ -154,7 +143,7 @@ class point(algebra.Element):
             self.B = x.B
             self.prime = x.prime
         else:
-            if (type(x) == int) or isinstance(x,pnum):
+            if (type(x) == int or type(x) == long) or isinstance(x,pnum):
                 self.value = (pnum(x, p),pnum(y, p))
             else:
                 self.value = inf
@@ -164,6 +153,9 @@ class point(algebra.Element):
     
     def __str__(self):
         return str.format("{}",self.value)
+    
+    def __repr__(self):
+        return self.__str__()
     
     def __eq__(self, other):
         return (self.value == other.value)
@@ -196,6 +188,9 @@ class point(algebra.Element):
             prod = self.identity()
         
         return prod
+    
+    def __div__(self, other):
+        return self*other.inv() 
         
     def Order(self):
         return NotImplemented
