@@ -1,7 +1,7 @@
 """
 Defines an elliptic curve group
 """
-# from tonelli import prime_mod_sqrt
+from ecc_common import prime_mod_sqrt
 import os.path
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir)))
@@ -12,17 +12,31 @@ inf = "Infinity"
 # a number mod p
 class pnum(algebra.Element):
     def __init__(self, n, p=None):
-        if type(n) == int or type(n) == long:
+        if (type(n) == int or type(n) == long) and not(p is None):
             self.value = n % p
             self.prime = p
-        elif type(n) == type(self):
+        elif type(n) == type(self) :
             self.value = n.value
             self.prime = n.prime
         else:
             raise TypeError("Can't make pnum from {}", n)
     
+    def sqrt(self):
+        roots = prime_mod_sqrt(self.value, self.prime)
+        if len(roots)==0:
+            raise ValueError("{} is a quadratic non-residue mod {}", self.value, self.prime)
+        
+        else:
+            return roots[0]
+    
     def __str__(self):
         return str(self.value)
+    
+    def __rshift__(self, n):
+        return pnum(self.value >> n, self.prime)
+    
+    def __lshift__(self, n):
+        return pnum(self.value << n, self.prime)
     
     def __mul__(self, other):
         if type(other)==type(self):
@@ -94,7 +108,7 @@ class pnum(algebra.Element):
         return self**(self.prime-2)
     
     def Order(self):
-        return p-1
+        return NotImplemented
     
     def identity(self):
         return pnum(1, self.prime)
@@ -138,10 +152,12 @@ class point(algebra.Element):
     
     def __init__(self, x, y = None, A = None, B = None, p = None):
         if y is None:
-            self.value = x.value
-            self.A = x.A
-            self.B = x.B
-            self.prime = x.prime
+            if type(x) == type(self):
+                self.value = x.value
+                self.A = x.A
+                self.B = x.B
+                self.prime = x.prime
+
         else:
             if (type(x) == int or type(x) == long) or isinstance(x,pnum):
                 self.value = (pnum(x, p),pnum(y, p))
