@@ -26,8 +26,6 @@ class crypoTests(unittest.TestCase):
         #import pdb; pdb.set_trace()
         points = encrypt.text_to_points(text1)
         cipher_points = encrypt.encrypt_text(text1)
-        
-        
         text2 = decrypt.decrypt_points(cipher_points)
         
         self.assertEqual(text1, text2)
