@@ -2,7 +2,7 @@
 Common utilities for text encryption
 """
 
-def text_to_nums(text):
+def text_to_nums(text, block_length = 64):
     
     # turn into numbers
     plain_bytes = [ord(c) for c in text]
@@ -11,7 +11,6 @@ def text_to_nums(text):
     plain_nums = []
     working_num = 0
     length = 0
-    block_length = 15
     for byte in plain_bytes:
         working_num <<= 8
         working_num += byte

@@ -1,8 +1,9 @@
 import priv
 import arith
-import pickle
 import sys
-import struct
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.getcwd(), os.pardir)))
+import helpers
 
 def block_to_chars(block):
     """
@@ -22,14 +23,24 @@ def block_to_chars(block):
 
     return ''.join(chars)
 
+def decrypt_nums(nums):
+    return [arith.powm(block,priv.inverse,priv.modulus) for block in nums]
+
+def decrypt(text):
+    
+    # turn into array of longs
+    cypher_nums = [long(number) for number in sys.argv[1].strip('[]').split(',')]
+    
+    # decrypt the nums
+    plain_nums = decrypt_nums(cypher_nums)
+    
+    # turn plain_nums into text_to_nums
+    plaintext = [helpers.num_to_chars(num) for num in plain_nums]
+    
+    return plaintext
+    
 if __name__ == "__main__":
     
-    # string to encrypt
-    cyphertext = [int(number.strip('L')) for number in sys.argv[1].strip('[]').split(',')]
-    
-    # decrypt
-    plain_blocks = [arith.powm(block,priv.inverse,priv.modulus) for block in cyphertext]
-    
-    # turn into characters
-    plaintext = [block_to_chars(block) for block in plain_blocks]
+    cyphertext = sys.argv[1]
+    plaintext = decrypt(cyphertext)
     print ''.join(plaintext)

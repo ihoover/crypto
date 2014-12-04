@@ -12,10 +12,11 @@ def encrypt(plain_point, base, raised_base):
     Encrypts a point of an elliptic curve
     """
     
-    random_exponent = 4#long(2**(2**(1/random.random())))
+    e = random.choice(range(5,1000))
+    random_exponent = pnum(2, prime)**e
     
-    cipher1 = base ** random_exponent
-    cipher2 = plain_point * raised_base ** random_exponent
+    cipher1 = base ** random_exponent.value
+    cipher2 = plain_point * raised_base ** random_exponent.value
     
     return (cipher1, cipher2)     
 
@@ -24,7 +25,7 @@ def text_to_points(text):
     """
     
     """
-    nums = helpers.text_to_nums(text)
+    nums = helpers.text_to_nums(text, 15)
     points =  [num_to_point(num) for num in nums]
     return points
 

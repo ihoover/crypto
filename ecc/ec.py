@@ -12,10 +12,12 @@ inf = "Infinity"
 # a number mod p
 class pnum(algebra.Element):
     def __init__(self, n, p=None):
-        if (type(n) == int or type(n) == long) and not(p is None):
+        self._identity = None
+        t = type(n)
+        if (t == int or t == long) and not(p is None):
             self.value = n % p
             self.prime = p
-        elif type(n) == type(self) :
+        elif t == pnum :
             self.value = n.value
             self.prime = n.prime
         else:
@@ -39,7 +41,7 @@ class pnum(algebra.Element):
         return pnum(self.value << n, self.prime)
     
     def __mul__(self, other):
-        if type(other)==type(self):
+        if type(other)==pnum:
             return pnum(self.value * other.value, self.prime)
         else:
             return pnum(self.value * other, self.prime)
@@ -111,8 +113,9 @@ class pnum(algebra.Element):
         return NotImplemented
     
     def identity(self):
-        return pnum(1, self.prime)
-        
+        if self._identity is None:
+            self._identity =  pnum(1, self.prime)
+        return self._identity
 
 # a point in the elliptic curve
 class point(algebra.Element):
@@ -134,7 +137,9 @@ class point(algebra.Element):
         """
         returns the "point at infinity"
         """
-        return point(inf, inf, self.A, self.B, self.prime)
+        if (self._identity is None):
+            self._identity = point(inf, inf, self.A, self.B, self.prime)
+        return self._identity
     
     @property
     def x(self):
@@ -151,6 +156,7 @@ class point(algebra.Element):
             raise ZeroDivisionError("infinity has no y component")
     
     def __init__(self, x, y = None, A = None, B = None, p = None):
+        self._identity = None
         if y is None:
             if type(x) == type(self):
                 self.value = x.value
@@ -191,14 +197,14 @@ class point(algebra.Element):
         # Case 1, self != other
         try:
             if self != other:
-                slope = pnum((other.y - self.y)/(other.x - self.x), self.prime)
-                new_x = slope**2 - self.x - other.x            
+                neg_slope = (self.y - other.y)/(other.x - self.x)
+                new_x = neg_slope*neg_slope - self.x - other.x            
             else:
-                slope = (3*self.x**2 + self.A)/(self.y * 2)
-                new_x = slope**2 - 2*self.x
+                neg_slope = (3*self.x*self.x + self.A)/(self.y * -2)
+                new_x = neg_slope*neg_slope - 2*self.x
             
-            new_y = self.y + slope*(new_x - self.x)
-            prod = point(new_x, 0 - new_y, self.A, self.B, self.prime)
+            new_y = neg_slope*(new_x - self.x) - self.y
+            prod = point(new_x, new_y, self.A, self.B, self.prime)
             
         except ZeroDivisionError:
             prod = self.identity()
