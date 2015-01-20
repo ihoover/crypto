@@ -107,7 +107,7 @@ class pnum(algebra.Element):
         return self.__str__()
     
     def inv(self):
-        return self**(self.prime-2)
+        return pnum(self.value**(self.prime-2), self.prime)
     
     def Order(self):
         return NotImplemented
@@ -198,7 +198,7 @@ class point(algebra.Element):
         try:
             if self != other:
                 neg_slope = (self.y - other.y)/(other.x - self.x)
-                new_x = neg_slope*neg_slope - self.x - other.x            
+                new_x = pnum(neg_slope.value * neg_slope.value - self.x.value - other.x.value, self.prime)          
             else:
                 neg_slope = (3*self.x*self.x + self.A)/(self.y * -2)
                 new_x = neg_slope*neg_slope - 2*self.x
