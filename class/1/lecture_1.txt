@@ -1,0 +1,85 @@
+Cryptography: keeping things secret.
+
+- What does it mean to keep information secret?
+
+Alice -----------> Bob
+	   ^
+	   |
+	  Eve (always watching and listening...)
+
+What information does Eve have?
+- Eve speaks same language as Alice and Bob (knows how to interpret plaintext and recognize it)
+- Eve is listening to what Alice and Bob are saying (and they say a lot of things)*
+- Eve is clever
+- Eve knows how the information is being scrambbled (she knows the algorithm), but is missing the "key"
+
+Key (my definition): Algorithm + key = complete knowlege e.g. nothing is secret.
+
+-----------------------------------
+Example: 
+
+1
+--
+	Ciphertext: Qrz dv L zdv brxqj dqg hdvb xqghu wkh dssoh erxjkv <- time to think about this
+	Plaintext:  Now as I was young and easy under the apple boughs
+	
+	Shift cipher (rotation cypher, ceaser cipher).  In this case shift by 3.
+		
+	Plain:    ABCDEFGHIJKLMNOPQRSTUVWXYZ
+	Cipher:   DEFGHIJKLMNOPQRSTUVWXYZABC
+
+	key: n \in [1,2,3,...,25]
+
+2
+--
+	Ciphertext: zoo rtmlizmxv glylttzmh rmgl pmld
+	Plaintext:  all ignorance toboggans into know
+
+	Atbash cipher.
+	Plain:	ABCDEFGHIJKLMNOPQRSTUVWXYZ
+	Cipher: ZYXWVUTSRQPONMLKJIHGFEDCBA
+	
+	key: None (just an algorithm)
+
+3
+--
+These are all examples of substitution ciphers.
+
+A <-> J
+B <-> F
+... etc.
+
+key: on an alphabet of N letters, key \in S_N (N! possabilities)
+--------------------------------
+
+Attacks: types of secret information.  Is it still secret when Eve has access to certain information?
+
+Possible assumptions under which we can talk about security.
+- cyphertext only
+- plain, cipher pairs
+- chosen cyphertext
+- chosen plaintext
+
+---------------------------------
+Excersise:
+
+1
+--
+	Under which assumptions are the above cryptosystems secret (Answer none (assuming there is a lot of available ciphertext, frequency analysis does the trick))
+
+2
+--
+	In groups of 2-3 come up with a cipher.
+	- ascii -> ascii
+	- easy to implement
+
+3
+--
+	Document your algorithm (sudo code, or code with LOTS OF COMMENTS!!!), and put it in the folder in public.
+
+
+
+Before next class, run frequency analysis on your cipher of (really large open source document I will find.).  See if your cipher is secure under ciphertext only attack (result should be statistical noise).
+
+---------------------------------------
+* Perhaps a note about Unicity distance for people interested in the question of "how much?"
