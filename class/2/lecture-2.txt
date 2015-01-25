@@ -1,0 +1,73 @@
+What does it mean to keep information secret?
+
+Conceptual model:
+
+Alice -----------> Bob
+	   ^
+	   |
+	  Eve (always watching and listening...)
+
+What information does Eve have?
+- Eve speaks same language as Alice and Bob (knows how to interpret plaintext and recognize it)
+- Eve is listening to what Alice and Bob are saying (and they say a lot of things)*
+- Eve is clever
+- Eve knows how the information is being scrambbled (she knows the algorithm), but is missing the "key"
+
+Important!  The algorithm is public, in general.  Thus the secret key is really important.  If there are only a few possible keys, we could just try them all and see which one works (note, we are assuming we will recognize plain text when we see it). Recall previous examples.
+
+1
+--
+
+	Shift cipher (rotation cypher, ceaser cipher).  In this case shift by 3.
+		
+	Plain:    ABCDEFGHIJKLMNOPQRSTUVWXYZ
+	Cipher:   DEFGHIJKLMNOPQRSTUVWXYZABC
+
+	key: n \in [1,2,3,...,25]
+
+	to crack, with knowledge of the algorithm, just try all keys.  Trivial.
+
+2
+--
+	Ciphertext: zoo rtmlizmxv glylttzmh rmgl pmld
+	Plaintext:  all ignorance toboggans into know
+
+	Atbash cipher.
+	Plain:	ABCDEFGHIJKLMNOPQRSTUVWXYZ
+	Cipher: ZYXWVUTSRQPONMLKJIHGFEDCBA
+	
+	key: None (just an algorithm).  Trivial to crack.
+
+However,
+These are all examples of substitution ciphers.
+
+A <-> J
+B <-> F
+... etc.
+
+key: on an alphabet of N letters, key \in S_N (N! possabilities).  Not pssible to brute force!  This is good,  but not good enough, it turns out :(  
+
+Attacks!
+-------------------------------------
+types of secret information.  Is it still secret when Eve has access to certain information?
+
+Possible assumptions under which we can talk about security.
+- cyphertext only
+- plain, cipher pairs
+- chosen cyphertext
+- chosen plaintext
+
+Under which assumptions is generic substitution secure? <-- think about this.
+
+Basically, if the output if a cipher contains any patterns, it isn't secure even under the most basic assumption of cyphertext only.  It should look like random noise.
+
+For basic substitution ciphers, the attack is simple.  Collect a large body of enciphered text, and analyze character frequency.  Compare this with the character frequency of plain english text, and start to pair them off (most frequent is probably 'e' etc.).
+
+---------------------------------
+To think about: What to fo if the message is really short?
+
+For example, Bob wishes to send to Alice a binary message. 0 or 1.  The encryption algorithm is pulbic.  How can Bob do this without giving Eve any information?  Note:  knowing that Bob answered differently yesterday than today is still information for Eve, even if she doesn't know which is 0 and which is 1.  
+
+We cant tackle this without more mathematics.  But it might make an interesting topic or project.
+
+
