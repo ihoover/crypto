@@ -75,7 +75,9 @@ int main(int argc, char **argv){
 	int i = 0;
 	while ((text=fgetc(file)) != EOF){
 		printf (" %c-%d", text, text);
-		if (text != '\n'){
+		
+		// don't encode non-printing
+		if (text > 31){
     		text -= 32; // shift to zero space (first printing char)
 	    	if (flag == 'e'){
 	    		new_text = (text + (key[i%key_length] - 32))%95;
